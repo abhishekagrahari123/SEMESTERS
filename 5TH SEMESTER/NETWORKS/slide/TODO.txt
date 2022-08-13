@@ -1,0 +1,46 @@
+cyclic redundancy check - done
+
+doubts
+ch1
+1st slide - network edge mein - access network aur physical media kaise
+left 35th slide.
+
+access networks (local isps)
+regional isps
+global isps connected through internet exchange points and peering links
+
+ch2
+status line - status code and status phrase
+Header lines
+data
+
+ch3 
+rdt 1.0 reliable transfer over a reliable channel
+Handling Bit errors-
+rdt 2.0 channel with bit errors in data packet- introduction of ACKs/NAKs 
+rdt 2.1 handling garbled ACKs/NAKs - introduction of seq no in data packets
+rdt 2.2 NAK free protocol - introduction of seq no in ACKs/NAKs
+Handling Packet loss-
+rdt 3.0
+Till here stop and wait protocol.
+Pipelining-
+Go-back-N slide 64 imp, sender have timer only for oldest in-flight packet.
+selective repeat - maintains timer for each unacked packet.
+TCP congestion and flow control set window size.
+The sequence number for a segment is the byte stream number of the first byte of the segment
+ack number = x -> ki mujhe teri taraf se x seq number ka packet chahiye.
+sender maintains amount of unacked packet at receive window.
+increasing the congestion window by 1MSS for each of the acknowleged segments results in
+doubling the sending rate at every RTT.
+
+ch4 
+DHCP discover, DHCP offer, DHCP request, DHCP ACK.
+ch5
+
+numerical
+
+past_year
+
+book 
+
+video problems

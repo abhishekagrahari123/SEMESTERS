@@ -1,0 +1,62 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+
+\tolerance = 1
+\emergencystretch=\maxdimen
+\hyphenpenalty=10000
+\hbadness=10000
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{CS342}
+\rhead{Computer Networks Laboratory}
+\rfoot{190123066}
+\lfoot{Abhishek Agrahari}
+\cfoot{\thepage}
+
+\title{CS342 : Computer Networks Laboratory\\Assignment 1}
+\date{}
+\author{\LARGE\textbf{Abhishek Agrahari}\\\\\LARGE\textbf{190123066}\\\\Mathematics and Computing\\\\IIT Guwahati}
+\newpage
+
+\begin{document}
+\newpage
+\maketitle
+\clearpage
+
+\bgroup\obeylines
+\textbf{Ans 1}-
+
+\textbf{a)} -c count =$>$ specifies the number of echo requests, as indicated by the count variable, to be sent.
+
+\textbf{b)} -i Wait =$>$ Waits the number of seconds specified by the Wait variable between the sending of each packet. The default is to wait for one second between each packet.
+
+\textbf{c)} -l Preload =$>$ Defines the number of packets to send without waiting for a reply. To specify a value higher than 3, you need superuser permissions.
+
+\textbf{d)} -s PacketSize =$>$ Specifies the number of data bytes to be sent.If the payload size is set to 32 bytes, total packet size becomes 40 bytes when combined with the 8 bytes of ICMP header data.\\
+
+\textbf{Ans 2}-
+\textbf{IP 1 -} www.google.com US 
+\textbf{IP 2 -} www.codeforces.com sweden
+\textbf{IP 3 -} www.huawei.com china
+\textbf{IP 4 -} www.india.gov.in india
+\textbf{IP 5 -} www.leetcode.com  
+\textbf{IP 6 -} www.whatsapp.com germany
+\egroup
+\begin{center}
+\begin{tabular}{ |c|c|c| } 
+ \hline
+ cell1 & cell2 & cell3 \\ 
+ cell4 & cell5 & cell6 \\ 
+ cell7 & cell8 & cell9 \\ 
+ \hline
+\end{tabular}
+\end{center}
+
+
+
+
+
+\end{document}

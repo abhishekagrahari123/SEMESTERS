@@ -1,0 +1,19 @@
+Task1: Scheduling
+implemented scheduling policies like:
+1. Default is round robin
+2. first come first serve
+3. multilevel queue 
+	-> set_prio
+4. dynamic multi level queue scheduling
+
+Task2: 
+yield function implementation
+
+Task3.1:
+general sanity test
+
+Task3.2:
+SML sanity test
+
+
+answer1 = 

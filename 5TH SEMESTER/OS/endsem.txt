@@ -1,0 +1,37 @@
+4 - 5 lec - done, 2 tut done except last question of 4G
+doubt slide 81, how page can be modified without using, does using means reading.
+
+5 - 3lec - done, 3tut - done.
+
+6 - 3 lec - done, 1tut
+
+7 - 3lec - done, no tut
+
+User
+Application
+Kernel I/O subsystem
+Operating system
+Device driver - this and above are software
+Device controller - socket where the i/o devices connect, it has registers
+Device
+
+
+8 - 3lec - done, no tut
+
+take p = 7 and q = 13, must be large prime numbers.
+N = p*q = 7*13 = 91, 
+Choose public key co-prime to (p-1)*(q-1), because of this coprime condition, inverse of
+public key exist, give it to reciever.
+Let PubKey = 5
+We get PriKey = 29
+PubKey * PriKey mod (p-1)*(q-1) = 1
+
+for message M, let 69
+sent_text = M^(PubKey) mod N, 69^5 mod 91 = 62
+decryprion process = (sent_text)^(PriKey) mod N. 62^29 mod 91 = 69 hurray
+
+9 - 2lec - done, no tut
+Type 0 = hardware functionality
+Type1 a = 
+Type1 b = Another variation of a general purpose os that produce vmm functionality
+Type 2= virtual box

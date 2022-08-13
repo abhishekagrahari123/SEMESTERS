@@ -1,0 +1,19 @@
+if process demands we are giving at that time but delaying for page faults
+if tf->trapno = T_PGFLT process needs new memory
+allocuvm called by the growproc
+u have to call allocuvm in your code
+
+Task1 = to implement paging a kernel program have to be written
+void create_kernel_process(cont char *name, void (*entryport)())
+it create a kernel process and add it to the processes queue
+
+Task2 = swap out mechanism
+whenever kernel tries to allocate memory for a process and fails, kernel should put the process into 
+sleeping state and request for a freee page must be submitted to the kernel swaooing out process.
+
+swapping out process will sace current state of rpocess which is to be swapped out, it 
+will make the present bit to 0 mark the page as swapped out and make it free page.
+
+Task3: swapping in mechanism:
+when the kernel detects a page fault, it must check if the cause of this page fault
+is in swapping out mechanism

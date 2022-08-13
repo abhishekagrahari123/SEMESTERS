@@ -1,0 +1,28 @@
+1.0 = assumes no bit errors and packet loss.
+2.0 = it has checksum(to detect bit errors)
+2.1 = it has seq number(to detect bit errors of reciever message of ack or nak)
+retransmission is to be done therefore to remove confusion at receiver end of old
+new packet it is introduced.
+2.2 = only ack for last correctly recieved
+3.0 = packet loss. 
+
+rdt 3.0 = if sender recieves corrupt or wrong seq number ack no action. action taken at 
+timeout only.
+
+go back n = it don't give acknowlege of out of order packet, cumulative acknowlegment, timer
+for oldest inflight packet.
+selective repeat = reciever selectively acknowleges out of order packet, sender maintain
+timer for each unacked packed and selectively retransmit unacked packet.
+
+window size <= 1/2*sequence number space.
+sample rrt affect decays exponentially.
+2way handshake?
+
+congestion control = too many sender too much send data difficult for network to control
+flow control = one sender send too much data difficult for reciever to control
+
+multiplexing
+congestion control
+udp checksum
+udp packet
+

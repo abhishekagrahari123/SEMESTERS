@@ -1,0 +1,310 @@
+diff --git a/Makefile b/Makefile
+index 09d790c..37c804e 100644
+--- a/Makefile
++++ b/Makefile
+@@ -181,6 +181,7 @@ UPROGS=\
+ 	_usertests\
+ 	_wc\
+ 	_zombie\
++	_drawtest\
+ 
+ fs.img: mkfs README $(UPROGS)
+ 	./mkfs fs.img README $(UPROGS)
+@@ -250,7 +251,7 @@ qemu-nox-gdb: fs.img xv6.img .gdbinit
+ EXTRA=\
+ 	mkfs.c ulib.c user.h cat.c echo.c forktest.c grep.c kill.c\
+ 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
+-	printf.c umalloc.c\
++	printf.c umalloc.c drawtest.c\
+ 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
+ 	.gdbinit.tmpl gdbutil\
+ 
+diff --git a/drawtest.c b/drawtest.c
+new file mode 100644
+index 0000000..89a6376
+--- /dev/null
++++ b/drawtest.c
+@@ -0,0 +1,24 @@
++#include "types.h"
++#include "stat.h"
++#include "user.h"
++
++int
++main(void)
++{
++    // declaring a buffer of 1563 bytes which can store the wolf string
++    char *buf = malloc(1563);
++
++    // ret is the value returned from sys_draw function in sysproc.c
++    int ret = draw(buf, 1563);
++
++    if (ret == -1) {
++        // if size is less it gives error message
++        printf(1, "ERROR: Size Too Small.\n");
++    }
++    else {
++        //else it will print the wolfie
++        printf(1, "Wolfie Size = %d Bytes\n", ret);
++        printf(1, "%s\n", buf);
++    }
++    exit();
++}
+diff --git a/syscall.c b/syscall.c
+index ee85261..f19a386 100644
+--- a/syscall.c
++++ b/syscall.c
+@@ -19,7 +19,7 @@ fetchint(uint addr, int *ip)
+ {
+   struct proc *curproc = myproc();
+ 
+-  if(addr >= curproc->sz || addr+4 > curproc->sz)
++  if (addr >= curproc->sz || addr + 4 > curproc->sz)
+     return -1;
+   *ip = *(int*)(addr);
+   return 0;
+@@ -34,12 +34,12 @@ fetchstr(uint addr, char **pp)
+   char *s, *ep;
+   struct proc *curproc = myproc();
+ 
+-  if(addr >= curproc->sz)
++  if (addr >= curproc->sz)
+     return -1;
+   *pp = (char*)addr;
+   ep = (char*)curproc->sz;
+-  for(s = *pp; s < ep; s++){
+-    if(*s == 0)
++  for (s = *pp; s < ep; s++) {
++    if (*s == 0)
+       return s - *pp;
+   }
+   return -1;
+@@ -49,7 +49,7 @@ fetchstr(uint addr, char **pp)
+ int
+ argint(int n, int *ip)
+ {
+-  return fetchint((myproc()->tf->esp) + 4 + 4*n, ip);
++  return fetchint((myproc()->tf->esp) + 4 + 4 * n, ip);
+ }
+ 
+ // Fetch the nth word-sized system call argument as a pointer
+@@ -60,10 +60,10 @@ argptr(int n, char **pp, int size)
+ {
+   int i;
+   struct proc *curproc = myproc();
+- 
+-  if(argint(n, &i) < 0)
++
++  if (argint(n, &i) < 0)
+     return -1;
+-  if(size < 0 || (uint)i >= curproc->sz || (uint)i+size > curproc->sz)
++  if (size < 0 || (uint)i >= curproc->sz || (uint)i + size > curproc->sz)
+     return -1;
+   *pp = (char*)i;
+   return 0;
+@@ -77,7 +77,7 @@ int
+ argstr(int n, char **pp)
+ {
+   int addr;
+-  if(argint(n, &addr) < 0)
++  if (argint(n, &addr) < 0)
+     return -1;
+   return fetchstr(addr, pp);
+ }
+@@ -103,29 +103,31 @@ extern int sys_unlink(void);
+ extern int sys_wait(void);
+ extern int sys_write(void);
+ extern int sys_uptime(void);
++extern int sys_draw(void);
+ 
+ static int (*syscalls[])(void) = {
+-[SYS_fork]    sys_fork,
+-[SYS_exit]    sys_exit,
+-[SYS_wait]    sys_wait,
+-[SYS_pipe]    sys_pipe,
+-[SYS_read]    sys_read,
+-[SYS_kill]    sys_kill,
+-[SYS_exec]    sys_exec,
+-[SYS_fstat]   sys_fstat,
+-[SYS_chdir]   sys_chdir,
+-[SYS_dup]     sys_dup,
+-[SYS_getpid]  sys_getpid,
+-[SYS_sbrk]    sys_sbrk,
+-[SYS_sleep]   sys_sleep,
+-[SYS_uptime]  sys_uptime,
+-[SYS_open]    sys_open,
+-[SYS_write]   sys_write,
+-[SYS_mknod]   sys_mknod,
+-[SYS_unlink]  sys_unlink,
+-[SYS_link]    sys_link,
+-[SYS_mkdir]   sys_mkdir,
+-[SYS_close]   sys_close,
++  [SYS_fork]    sys_fork,
++  [SYS_exit]    sys_exit,
++  [SYS_wait]    sys_wait,
++  [SYS_pipe]    sys_pipe,
++  [SYS_read]    sys_read,
++  [SYS_kill]    sys_kill,
++  [SYS_exec]    sys_exec,
++  [SYS_fstat]   sys_fstat,
++  [SYS_chdir]   sys_chdir,
++  [SYS_dup]     sys_dup,
++  [SYS_getpid]  sys_getpid,
++  [SYS_sbrk]    sys_sbrk,
++  [SYS_sleep]   sys_sleep,
++  [SYS_uptime]  sys_uptime,
++  [SYS_open]    sys_open,
++  [SYS_write]   sys_write,
++  [SYS_mknod]   sys_mknod,
++  [SYS_unlink]  sys_unlink,
++  [SYS_link]    sys_link,
++  [SYS_mkdir]   sys_mkdir,
++  [SYS_close]   sys_close,
++  [SYS_draw]    sys_draw,
+ };
+ 
+ void
+@@ -135,7 +137,7 @@ syscall(void)
+   struct proc *curproc = myproc();
+ 
+   num = curproc->tf->eax;
+-  if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
++  if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+     curproc->tf->eax = syscalls[num]();
+   } else {
+     cprintf("%d %s: unknown sys call %d\n",
+diff --git a/syscall.h b/syscall.h
+index bc5f356..4cc6514 100644
+--- a/syscall.h
++++ b/syscall.h
+@@ -20,3 +20,4 @@
+ #define SYS_link   19
+ #define SYS_mkdir  20
+ #define SYS_close  21
++#define SYS_draw   22
+\ No newline at end of file
+diff --git a/sysproc.c b/sysproc.c
+index 0686d29..4a1b4cf 100644
+--- a/sysproc.c
++++ b/sysproc.c
+@@ -31,7 +31,7 @@ sys_kill(void)
+ {
+   int pid;
+ 
+-  if(argint(0, &pid) < 0)
++  if (argint(0, &pid) < 0)
+     return -1;
+   return kill(pid);
+ }
+@@ -48,10 +48,10 @@ sys_sbrk(void)
+   int addr;
+   int n;
+ 
+-  if(argint(0, &n) < 0)
++  if (argint(0, &n) < 0)
+     return -1;
+   addr = myproc()->sz;
+-  if(growproc(n) < 0)
++  if (growproc(n) < 0)
+     return -1;
+   return addr;
+ }
+@@ -62,12 +62,12 @@ sys_sleep(void)
+   int n;
+   uint ticks0;
+ 
+-  if(argint(0, &n) < 0)
++  if (argint(0, &n) < 0)
+     return -1;
+   acquire(&tickslock);
+   ticks0 = ticks;
+-  while(ticks - ticks0 < n){
+-    if(myproc()->killed){
++  while (ticks - ticks0 < n) {
++    if (myproc()->killed) {
+       release(&tickslock);
+       return -1;
+     }
+@@ -89,3 +89,61 @@ sys_uptime(void)
+   release(&tickslock);
+   return xticks;
+ }
++
++// added a system call function of wolfie
++int
++sys_draw(void)
++{
++
++  //ASCII art image
++  char *wolfie = "      \t\t,ood8888booo,\n\
++                              ,od8           8bo,\n\
++                           ,od                   bo,\n\
++                         ,d8                       8b,\n\
++                        ,o                           o,    ,a8b\n\
++                       ,8                             8,,od8  8\n\
++                       8'                             d8'     8b\n\
++                       8                           d8'ba     aP'\n\
++                       Y,                       o8'         aP'\n\
++                        Y8,                      YaaaP'    ba\n\
++                         Y8o                   Y8'         88\n\
++                          `Y8               ,8\"           `P\n\
++                            Y8o        ,d8P'              ba\n\
++                       ooood8888888P\"\"\"'                  P'\n\
++                    ,od                                  8\n\
++                 ,dP     o88o                           o'\n\
++                ,dP          8                          8\n\
++               ,d'   oo       8                       ,8\n\
++               $    d$\"8      8           Y    Y  o   8\n\
++              d    d  d8    od  \"\"boooooooob   d\"\" 8   8\n\
++              $    8  d   ood' ,   8        b  8   '8  b\n\
++              $   $  8  8     d  d8        `b  d    '8  b\n\
++               $  $ 8   b    Y  d8          8 ,P     '8  b\n\
++               `$$  Yb  b     8b 8b         8 8,      '8  o,\n\
++                    `Y  b      8o  $$o      d  b        b   $o\n\
++                     8   '$     8$,,$\"      $   $o      '$o$$\n\
++                      $o$$P\"                 $$o$\n\n";
++  void *buff;
++  uint size;
++
++  //allocating buffer
++  argptr(0, (void *)&buff, sizeof(*buff));
++  argptr(1, (void *)&size, sizeof(size));
++
++  //If the buffer is too small, or not valid a negative value(-1) is returned
++  //1563 is the size of the string wolf
++  if (size < 1563)
++    return -1;
++  else
++  {
++    //transferring wolf string to buffer
++    int i = 0;
++    while (i < 1563)
++    {
++      ((char *)buff)[i] = wolfie[i];
++      i++;
++    }
++    //if call succeeds number of bytes copied is returned
++    return 1563;
++  }
++}
+\ No newline at end of file
+diff --git a/user.h b/user.h
+index 4f99c52..0d51d01 100644
+--- a/user.h
++++ b/user.h
+@@ -23,6 +23,7 @@ int getpid(void);
+ char* sbrk(int);
+ int sleep(int);
+ int uptime(void);
++int draw(void*, uint);
+ 
+ // ulib.c
+ int stat(const char*, struct stat*);
+diff --git a/usys.S b/usys.S
+index 8bfd8a1..d9be91e 100644
+--- a/usys.S
++++ b/usys.S
+@@ -29,3 +29,4 @@ SYSCALL(getpid)
+ SYSCALL(sbrk)
+ SYSCALL(sleep)
+ SYSCALL(uptime)
++SYSCALL(draw)
