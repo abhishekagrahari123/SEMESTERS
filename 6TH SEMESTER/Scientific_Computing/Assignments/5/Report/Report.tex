@@ -1,0 +1,263 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{fancyvrb}
+\usepackage{textcomp}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{
+	top  = 20mm,
+	left = 10 mm ,
+	right = 10 mm ,
+	bottom = 20mm
+}
+\pagestyle{fancy}
+\lhead{MA-322}
+\rhead{Scientific Computing Lab}
+\makeatother
+\renewcommand{\labelitemii}{*}
+\renewcommand{\labelitemiii}{$\circ$}
+\renewcommand{\labelitemiv}{$\bullet$}
+
+\title{Assignment 5}
+\author{Abhishek Agrahari\\190123066}
+\date{}
+\begin{document}
+\maketitle
+
+\section{} 
+\subsection{Code}
+\begin{verbatim}
+% we have to calculate g(1) which means integral 0 to 1 e^(-x^2)
+clc;
+clear;
+a = 0;
+b = 1;
+actual_area = 0.74682413;
+err = @(a,b) abs(a-b);
+
+fprintf(" N \t\t\t\t Rrule \t\t\t\t Trule \t\t\t\t Srule " + ...
+    "\t\t\t\t Er \t\t\t\t Et \t\t\t\t Es\n")
+for N = [50, 100, 200]
+    h = (b-a)/N;
+    Rectangle_tot = 0;
+    Trapezoidal_tot = 0;
+    Simpson_tot = 0;
+    for i = 1:N
+        a1 = a + (i-1)*h;
+        a2 = a + i*h;
+        Rectangle_tot = Rectangle_tot + left_rectangle_rule(a1, a2);
+        Trapezoidal_tot = Trapezoidal_tot + trapezoidal_rule(a1, a2);
+        Simpson_tot = Simpson_tot + simpson_rule(a1,a2);
+    end
+    fprintf("%3.0f \t\t %.10f \t\t %.10f \t\t %.10f \t\t" + ...
+        " %.10f \t\t %.10f \t\t %.10f\n", ...
+        N, Rectangle_tot, Trapezoidal_tot, Simpson_tot, ...
+        err(actual_area, Rectangle_tot), ...
+        err(actual_area, Trapezoidal_tot), ...
+        err(actual_area, Simpson_tot));
+end
+
+
+function val = f(x)
+    val = exp(-(x^2));
+end
+
+function val = left_rectangle_rule(a,b)
+    val = (b-a)*f(a);
+end
+
+function val = trapezoidal_rule(a,b)
+    val = ((b-a)*(f(a) + f(b)))/2;
+end
+
+function val = simpson_rule(a,b)
+    val = ((b-a)*(f(a) + 4*f((a + b)/2)+ f(b)))/6;
+end
+\end{verbatim}
+
+\subsection{Output}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{q1.png}
+\end{figure}
+
+\subsection{Note}
+\begin{itemize}
+\item I have used Left rectangle rule.
+\end{itemize}
+
+\subsection{Observations}
+\begin{itemize}
+  \item Error decreases as we go from Rectangle to Trapezoidal and Trapezoidal to Simpson rule.
+
+  \begin{itemize}
+  \item This observation is in accordance with the order of their errors as given below - 
+  	\begin{itemize}
+  		\item Rectangle Rule : $O(h)$
+  		\item Trapezoidal Rule : $O(h^2)$
+  		\item Simpson Rule : $O(h^4)$
+  	\end{itemize}
+  \end{itemize}
+
+  \item Error decreases with increase in N.
+  	\begin{itemize}
+  		\item This is because as N increases, h decreases which is proportional to the error.
+  	\end{itemize}
+  \item Actual value of the integral has 8 significant digits and value computed through Simpson rule is correct to 8 digits. Therefore Simpson rule produced the correct integral upto the desired decimal places.
+\end{itemize}
+
+\clearpage
+\section{}
+\subsection{Code}
+\begin{verbatim}
+clc;
+clear;
+a = 0;
+b = 1;
+actual_area = 0.0808308690;
+err = @(a,b) abs(a-b);
+
+fprintf(" N \t\t\t    Trapezoidal \t   Corrected Trapezoidal \t  Err_Trapezoidal ...
+ \t Err_Corrected_Trapezoidal\n")
+for N = [1, 50, 100, 200]
+    h = (b-a)/N;
+    Trapezoidal_tot = 0;
+    Corr_Trapezoidal_tot = 0;
+    for i = 1:N
+        a1 = a + (i-1)*h;
+        a2 = a + i*h;
+        Trapezoidal_tot = Trapezoidal_tot + trapezoidal_rule(a1, a2);
+        Corr_Trapezoidal_tot = Corr_Trapezoidal_tot + corrected_trapezoidal_rule(a1,a2);
+    end
+    fprintf("%3.0f \t\t %.15f \t\t %.15f \t\t %.15f \t\t %.15f\n", ...
+        N, Trapezoidal_tot, Corr_Trapezoidal_tot, ...
+        err(actual_area, Trapezoidal_tot), err(actual_area, Corr_Trapezoidal_tot));
+end
+
+function val = f(x)
+    val = (x^2)*exp(-2*x);
+end
+
+function val = f_prime(x)
+    val = 2*exp(-2*x)*(x-x^2);
+end
+
+function val = trapezoidal_rule(a,b)
+    val = ((b-a)*(f(a) + f(b)))/2;
+end
+
+function val = corrected_trapezoidal_rule(a,b)
+    val = trapezoidal_rule(a,b) + ((b-a)^2)*(f_prime(a)-f_prime(b))/12;
+end
+\end{verbatim}
+
+\subsection{Output}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{q2.png}
+\end{figure}
+
+\subsection{Note}
+\begin{itemize}
+	\item N = 1 corresponds to non-composite method.
+	\item In the observations section below I have used the following conventions - 
+	\begin{itemize}
+		\item $f(x) = x^2.e^{-2x}$
+		\item $a = 0$
+		\item $b = 1$
+	\end{itemize}
+\end{itemize}
+\subsection{Observations}
+\begin{itemize}
+	  \item Error decreases with increase in N.
+  	\begin{itemize}
+  		\item This is because as N increases, h decreases which is proportional to the error.
+  	\end{itemize}
+	\item For all values of N, the value of integral computed through Trapezoidal and Corrected Trapezoidal rule is same.
+	\begin{itemize}
+		\item For N = 1, this is because error term given by the following expression, is zero.
+			 $$ \text {\textit{Correction Term}} =\frac{(b-a)^2 (f'(a)-f'(b))}{12} $$
+		\begin{itemize}
+		 \item Derivative of f(x) is $f'(x) = 2.e^{-2x} (x - x^2)$ and $f'(0) = f'(1)$
+		\end{itemize}
+		\item For N $>$ 1, error term given by the following expression, is zero.		 			$$ \text {\textit{Correction Term}} =\frac{h^2 (f'(a)-f'(b))}{12} $$
+		\begin{itemize}
+		\item This highlights the fact that even in the composite case, correction term involves derivative at ends only. Derivative terms for the points in the middle cancels out. 
+		\end{itemize}
+		
+	\end{itemize}
+\end{itemize}
+
+\clearpage
+\section{}
+\subsection{Code}
+\begin{verbatim}
+clc;
+clear;
+fun = @(x) exp((x.^2)./(-2));
+err = @(a,b) abs(a-b);
+for m = [1,2]
+    fprintf("\nFor m = %d\n", m)
+    fprintf(" N \t\t\t\t Srule \t\t\t\t\t Error \t\t\t\t\t Relative Error\n")
+    a = -m;
+    b = m;
+    actual_prob = integral(fun, a, b)*(1/sqrt(2*pi));
+    for N = [1, 50, 100, 200]
+        h = (b-a)/N;
+        Simpson_tot = 0;
+        for i = 1:N
+            a1 = a + (i-1)*h;
+            a2 = a + i*h;
+            Simpson_tot = Simpson_tot + simpson_rule(a1,a2);
+        end
+        Req_prob = Simpson_tot*(1/sqrt(2*pi));
+        fprintf("%3.0f \t\t %.15f \t\t %.15f \t\t %.15f\n", N, Req_prob, ...
+         err(actual_prob, Req_prob), err(actual_prob, Req_prob)/actual_prob);
+    end
+
+    fprintf("Actual Value of Required Probability : %.15f \n", actual_prob);
+end
+
+function val = f(x)
+    val = exp((x^2)/(-2));
+end
+
+function val = simpson_rule(a,b)
+    val = ((b-a)*(f(a) + 4*f((a + b)/2)+ f(b)))/6;
+end
+\end{verbatim}
+
+\subsection{Output}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.9]{q3.png}
+\end{figure}
+
+\subsection{Note}
+\begin{itemize}
+	\item N = 1 corresponds to non-composite method.
+	\item Relative error is calculated from the following formula -
+	$$ Relative Error = \left| \frac{\text{\textit{Actual Integral - Computed Integral} } }{\text{\textit{Actual Integral}}}\right| $$ 
+	\item Acutal Integral is calculated by an inbuilt function of matlab \begin{verbatim} integral(function_to_be_integrated, lower_limit, upper_limit)
+	\end{verbatim}
+\item Value of the probability is computed using the following formula - 
+$$ P(-m\sigma \leq x \leq m\sigma) = \frac{1}{\sqrt{2\pi}}\int_{-m}^m e^{\frac{-z^2}{2}} dz$$ 
+\end{itemize}
+\subsection{Observations}
+\begin{itemize}
+\item Error decreases with increase in N.
+  	\begin{itemize}
+  		\item This is because as N increases, h decreases which is proportional to the error.
+  	\end{itemize}
+\item Relative error for m = 2 is greater than the relative error for m = 1. 
+	\begin{itemize}
+		\item Therefore we can say that as the length of integration increases, value of error also increases.
+	\end{itemize}
+\item Error for non composite method (N = 1) is quite high.
+\end{itemize}
+\end{document}

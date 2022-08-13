@@ -1,0 +1,83 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{fancyvrb}
+\usepackage{textcomp}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{
+	top  = 17mm,
+	left = 10 mm ,
+	right = 10 mm ,
+	bottom = 17mm
+}
+\pagestyle{fancy}
+\lhead{MA-374}
+\rhead{Financial Engineering Lab}
+\makeatother
+\renewcommand{\labelitemii}{*}
+\renewcommand{\labelitemiii}{$\circ$}
+\renewcommand{\labelitemiv}{$\bullet$}
+
+\title{Assignment 10}
+\author{Abhishek Agrahari\\190123066}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Question 1} 
+Stock price are calculated using the following formula -
+\begin{align*}
+dS_{i-1} &= S_{i-1}.(\sigma. \sqrt{dt}. z(0,1) + Rate.dt)\\
+S_{i} &= S_{i-1} + dS_{i-1}
+\end{align*}
+where $z(0,1)$ is a number generated from the $N(0,1)$ distribution. Here $Rate$ is $\mu$ = 0.1 for real world and $r$ = 0.05 for risk neutral world.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.70]{1.png}
+\end{figure}
+
+Asian option price is calculated by first simulating various sample paths of the asset in risk neutral world. Then using the arithmetic average of the asset price, payoff is calculated and summed over all sample paths. This payoff is then discounted to $t = 0$ to get the price of the Asian options. 
+\\
+
+The price of a 6 months fixed-strike asian option with a strike price of 105 for both call and put options are computed. We also repeat the same for other values of K namely K = 90 and K = 110. The computed option prices are :
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.70]{2.png}
+\end{figure}
+Asian call price decreases and put price increases with increase in K from 90-100. This observation is in accordance with the expected behavior.
+
+We now carry out a sensitivity analysis of the option prices. For this we vary K(strike price), r(risk free rate), sigma(volatility) and T(time to maturity) and plot the 2D graphs.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45]{3.png}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45]{4.png}
+\end{figure}
+\clearpage
+\section*{Question 2}
+In this question Asian option are calculated by employing a variance reduction technique. For variance reduction, Antithetic Variates method is used. \\
+In this method, sample paths for stock prices are generated in pairs.
+These paths are negatively correlated with each other. So whenever one rises the other one falls and vice versa. Due to this negative correlation, variance of the option prices get reduced. 
+These are generated as follows - 
+\begin{align*}
+dS_{1i} &= S_{1i}.(\sigma. \sqrt{dt}. z(0,1) + r.dt)\\
+dS_{2i} &= S_{2i}.(-\sigma. \sqrt{dt}. z(0,1) + r.dt)
+\end{align*}
+
+After generating such sample paths asian option prices are computed using the same algorithm used in question 1.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.80]{5.png}
+\end{figure}
+We can see from the above output that there is not much difference in option prices, but variance of the prices on employing variance reduction techniques have reduced greatly. 
+\end{document}

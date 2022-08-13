@@ -1,0 +1,199 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{fancyvrb}
+\usepackage{textcomp}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{{images/}}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{
+	top  = 17mm,
+	left = 10 mm ,
+	right = 10 mm ,
+	bottom = 17mm
+}
+\pagestyle{fancy}
+\lhead{MA-374}
+\rhead{Financial Engineering Lab}
+\makeatother
+\renewcommand{\labelitemii}{*}
+\renewcommand{\labelitemiii}{$\circ$}
+\renewcommand{\labelitemiv}{$\bullet$}
+
+\title{Assignment 7}
+\author{Abhishek Agrahari\\190123066}
+\date{}
+\begin{document}
+\maketitle
+
+\section*{Question 1} 
+The solution to the Black-Scholes-Merton equation with terminal condition and boundary conditions is - 
+$$ c(t,x) = x.N(d_+(T-t,x)) - K.e^{-r(T-t)}.N(d_-(T-t,x)) \text{ where 0} \leq t < \text{T and x} > 0.$$
+where $$ d_{\pm}(\tau,x) = \frac{1}{\sigma \sqrt{\tau}}\left[ \log\frac{x}{K} + (r \pm \frac{\sigma^2}{2}) \right]$$
+and $N$ is the  cumulative standard normal distribution
+$$N(y) = \frac{1}{\sqrt{2\pi}}\int_{-\infty}^y e^{\frac{-z^2}{2}} dz = \frac{1}{\sqrt{2\pi}}\int_{-y}^\infty e^{\frac{-z^2}{2}} dz$$
+
+\noindent By put call parity we know that - 
+$$ f(t,x) = x - e^{-r(T-t)}K = c(t,x) - p(t,x)$$
+where $f$ is the value of a forward quantity at time $t \in [0,T]$ where stock price at time $t$ is $S(t) = x$.
+Therefore, 
+\begin{align*}
+p(t,x) &= x.(N(d_+(T-t,x))-1) - K.e^{-r(T-t)}.(N(d_-(T-t,x))-1)\\
+ &= K.e^{-r(T-t)}.N(-d_-(T-t,x)) - x.N(-d_+(T-t,x))
+\end{align*}
+
+\noindent Using above formulas for $c(t,x)$ and $p(t,x)$, prices for European call and put option is computed for \\ 0 $\leq t <$ T. For $t = T$, $c(t,x) = max(x-K, 0)$ and $p(t,x) = max(K-x,0)$
+\section*{Question 2}
+\begin{itemize}
+\item 2d plots for the Value of options $(c(t,x))$ is plotted by varying price of the underlying at a given time. This plot is plotted for $t =$ [ 0.0, 0.2, 0.4, 0.6, 0.8, 1.0 ]
+\begin{itemize}
+	\item By increasing the price of the underlying, call prices increases while put prices decreases.
+	\item As time to maturity $(T-t)$ decreases value of the options decreases.
+\end{itemize}
+\item 3d scatter plots are plotted by varying time and stock price at that time simultaneously.
+\begin{itemize}
+\item Plots are suitably rotated to get a better view.
+\end{itemize}
+
+\end{itemize}
+\begin{figure}[H]
+     \begin{center}
+%
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q2/fig1.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q2/fig2.png}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure {%
+            \includegraphics[width=4.1in, height = 3.5in]{q2/fig3.png}
+        }%
+        \subfigure{%
+            \includegraphics[width=4in, height = 3.5in]{q2/fig4.png}
+        }%
+    \end{center}
+\end{figure}
+\vspace{-60pt}
+\section*{Question 3}
+\begin{itemize}
+	\item Surface plots are plotted by varying time and stock price at that time simultaneously.
+	\item These plots are the surface plot version of the 3d scatter plots obtained in question 2.
+	\item Plots are suitably rotated to get a better view.
+\end{itemize}
+
+\begin{figure}[H]
+     \begin{center}
+        \subfigure {%
+            \includegraphics[width=4in, height = 3.3in]{q3/fig1.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3.3in]{q3/fig2.png}
+        }
+    \end{center}
+\end{figure}
+\vspace{-50pt}
+\section*{Question 4}
+\begin{itemize}
+
+\item I have done the senstivity analysis for the value of European call and put option as a function of following model parameters
+	\begin{itemize}
+		\item Strike Price ($K$)
+		\item Risk Free Return ($r$)
+		\item Sigma ($\sigma$)
+		\item Time of expiration ($T$)
+	\end{itemize}
+
+\item 2d plots are plotted assuming price of the underlying asset as 1 at different time points. All other values are taken as given in question 2, i.e. $K$ = 1, $T$ = 1, $r$ = 0.05, $\sigma$ = 0.6.
+
+\item One by one all these model parameters are varied and options price at given point of time is plotted. 
+\end{itemize}
+
+\begin{figure}[H]
+     \begin{center}
+%
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q4/fig1.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q4/fig2.png}
+        }\\ %  ------- End of the first row ----------------------%
+    \end{center}
+\end{figure}
+
+\begin{figure}[H]
+     \begin{center}
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q4/fig3.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q4/fig4.png}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q4/fig5.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q4/fig6.png}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q4/fig7.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q4/fig8.png}
+        }\\ %  ------- End of the first row ----------------------%
+    \end{center}
+\end{figure}
+\begin{itemize}
+\item Options price at t = 0 is plotted by varying two model parameters at a time.
+\item Price of the underlying at t = 0, is assumed to be 1.
+\end{itemize}
+\vspace{-20pt}
+\begin{figure}[H]
+     \begin{center}
+        \subfigure {%
+            \includegraphics[width=4in, height = 2.85in]{q4/fig9.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 2.85in]{q4/fig10.png}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure {%
+            \includegraphics[width=4in, height = 2.85in]{q4/fig11.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 2.85in]{q4/fig12.png}
+        }\\ %  ------- End of the first row ----------------------%
+                \subfigure {%
+            \includegraphics[width=4in, height = 2.85in]{q4/fig13.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 2.85in]{q4/fig14.png}
+        }\\ %  ------- End of the first row ----------------------%
+    \end{center}
+\end{figure}
+\begin{figure}[H]
+     \begin{center}
+
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q4/fig15.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q4/fig16.png}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q4/fig17.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q4/fig18.png}
+        }\\ %  ------- End of the first row ----------------------%
+        \subfigure {%
+            \includegraphics[width=4in, height = 3in]{q4/fig19.png}
+        }%
+        \subfigure {%
+           \includegraphics[width=4in, height = 3in]{q4/fig20.png}
+        }\\ %  ------- End of the first row ----------------------%
+    \end{center}
+\end{figure}
+\end{document}
