@@ -1,2 +1,2 @@
 # SEMESTERS
-This repository contains all the documents (Lectures, Quizzes, Assignments etc.) of IITG.
+This repository contains documents (Lectures, Quizzes, Assignments etc.) used in teaching Mathematics and Computing branch of IITG.
